@@ -11,14 +11,18 @@ class App extends Component {
     super(props)
     this.state = {
       activeUser: this.props.users[0],
-      currentUsers: this.props.users,
-      name: false,
-      age: false
+      filteredUsers: this.props.users,
+      searchText: '',
+      sortedBy: {
+        name: false,
+        age: false
+      }
     }
 
     this.handleUserClick = this.handleUserClick.bind(this)
     this.handleSearchInput = this.handleSearchInput.bind(this)
-    this.handleSortName = this.handleSortName.bind(this)
+    this.handleSorting = this.handleSorting.bind(this)
+    this.resetSorting = this.resetSorting.bind(this)
   }
 
   handleUserClick(id) {
@@ -27,39 +31,41 @@ class App extends Component {
   }
 
   handleSearchInput(event) {
-    const filterText = event.target.value.toLowerCase()
-    const currentUsers = this.props.users.filter(user => {
-      return user.name.toLowerCase().includes(filterText)
+    const searchText = event.target.value.toLowerCase()
+    const filteredUsers = this.props.users.filter(user => {
+      return user.name.toLowerCase().includes(searchText)
     })
-    this.setState({ currentUsers, activeUser: currentUsers[0] })
+    this.setState({
+      filteredUsers,
+      activeUser: filteredUsers[0],
+      searchText
+    })
   }
 
-  handleSortName(sortTitle) {
-    const x = this.state[sortTitle] ? -1 : 1
-    const sorted = this.state.currentUsers.sort((a, b) => {
-      if (a[sortTitle] < b[sortTitle]) return x * (-1)
-      if (a[sortTitle] > b[sortTitle]) return x
-      return 0
+  handleSorting(type) {
+    const direction = this.state.sortedBy[type] ? -1 : 1
+    const filteredUsers = [...this.state.filteredUsers]
+    const sorted = filteredUsers.sort((a, b) => {
+      if (a[type] === b[type]) return 0
+      return (a[type] > b[type]) ? direction : direction * -1
     })
-    if (sortTitle === 'name') {
-      this.setState(
-        {
-          activeUser: this.state.currentUsers[0],
-          currentUsers: sorted,
-          name: !this.state.name,
-          age: false
+    this.setState(
+      {
+        activeUser: this.state.filteredUsers[0],
+        filteredUsers: sorted,
+        sortedBy: {
+          [type]: !this.state.sortedBy[type]
         }
-      )
-    } else {
-      this.setState(
-        {
-          activeUser: this.state.currentUsers[0],
-          currentUsers: sorted,
-          age: !this.state.age,
-          name: false
-        }
-      )
-    }
+      }
+    )
+  }
+
+  resetSorting() {
+    this.setState({
+      activeUser: this.props.users[0],
+      filteredUsers: this.props.users,
+      searchText: ''
+    })
   }
 
   render() {
@@ -67,13 +73,18 @@ class App extends Component {
       <div className="app">
         <Header />
         <div className="container-fluid">
-          <SearchBar handleSearchInput={this.handleSearchInput} />
-          <Toolbar handleSortName={this.handleSortName} />
+          <SearchBar
+            handleSearchInput={this.handleSearchInput}
+            searchText={this.state.searchText}
+          />
+          <Toolbar
+            handleSorting={this.handleSorting}
+            resetSorting={this.resetSorting}
+          />
           <div className="row">
             <ActiveUser user={this.state.activeUser} />
             <UserList
-              currentUsers={this.state.currentUsers}
-              searchText={this.state.searchText}
+              filteredUsers={this.state.filteredUsers}
               handleUserClick={this.handleUserClick}
             />
           </div>

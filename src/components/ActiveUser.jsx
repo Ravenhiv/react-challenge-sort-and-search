@@ -1,26 +1,31 @@
 import React from 'react'
 import images from '../data/images'
 
-const ActiveUser = props => {
+const ActiveUser = ({ user }) => {
+  if (!user) return (
+    <div className="col-lg-2 col-md-3 col-sm-4">
+      <h3>Not found</h3>
+    </div>
+  )
   return (
     <div className="col-lg-2 col-md-3 col-sm-4">
       <div className="thumbnail">
-        <img src={images[props.user.image]} alt=""/>
+        <img src={images[user.image]} alt=""/>
         <div className="thumbnail-caption">
-          <h3>{props.user.name}</h3>
+          <h3>{user.name}</h3>
           <table className="user-info table table-responsive">
             <tbody>
               <tr>
                 <td>Age:</td>
-                <td>{props.user.age}</td>
+                <td>{user.age}</td>
               </tr>
               <tr>
                 <td>Favorite animal:</td>
-                <td>{props.user.image}</td>
+                <td>{user.image}</td>
               </tr>
               <tr>
                 <td>Phone:</td>
-                <td>{`8 ${props.user.phone}`}</td>
+                <td>{`8 ${user.phone}`}</td>
               </tr>
             </tbody>
           </table>
@@ -28,7 +33,7 @@ const ActiveUser = props => {
             <p>
               <b>Favorite phrase:</b>
             </p>
-            <span>{props.user.phrase}</span>
+            <span>{user.phrase}</span>
           </div>
         </div>
       </div>

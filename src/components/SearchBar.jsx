@@ -10,6 +10,7 @@ const SearchBar = props => {
             placeholder="Search people by name..."
             className="form-control"
             onChange={props.handleSearchInput}
+            value={props.searchText}
           />
         </div>
       </div>

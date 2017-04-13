@@ -1,17 +1,15 @@
 import React from 'react';
 import images from '../data/images'
 
-const UserData = props => {
-  const img = images[props.user.image]
-  const id = props.user.id
+const UserData = ({ user, handleUserClick }) => {
   return (
-    <tr className="user-data" onClick={() => props.handleUserClick(id)}>
+    <tr className="user-data" onClick={() => handleUserClick(user.id)}>
       <td className="user-image">
-        <img src={img} alt={props.user.name} width="60" height="60" />
+        <img src={images[user.image]} alt={user.name} width="60" height="60" />
       </td>
-      <td className="user-name">{props.user.name}</td>
-      <td className="user-age">{props.user.age}</td>
-      <td className="user-phone">{`8 ${props.user.phone}`}</td>
+      <td className="user-name">{user.name}</td>
+      <td className="user-age">{user.age}</td>
+      <td className="user-phone">{`8 ${user.phone}`}</td>
     </tr>
   )
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import UserData from './UserData'
 
-const UserList = props => {
+const UserList = ({ filteredUsers, handleUserClick }) => {
   return (
     <div className="col-lg-10 col-md-9 col-sm-8">
       <table className="user-list table table-striped">
@@ -14,11 +14,11 @@ const UserList = props => {
           </tr>
         </thead>
         <tbody>
-          {props.currentUsers.map((user) => (
+          {filteredUsers.map((user) => (
             <UserData
               user={user}
               key={user.id}
-              handleUserClick={props.handleUserClick}
+              handleUserClick={handleUserClick}
             />
           ))}
         </tbody>
